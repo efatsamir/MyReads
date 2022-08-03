@@ -5,17 +5,12 @@ import Header from './Header';
 
 
 
-const ListBooks = ({ books, updateShelf }) => {
+const BookList= ({ books, updateShelf }) => {
   
-  const currentlyReading=[];
-  const read=[] ;
-  const wantToRead=[];
-  
-  books.forEach(item => {
-    if (item.shelf === 'currentlyReading') return currentlyReading.push(item);
-    if (item.shelf === 'read') return read.push(item);
-    if (item.shelf === 'wantToRead') return wantToRead.push(item);
-  })
+  const currentlyReading = books.filter(book => book.shelf === 'currentlyReading');
+  const read = books.filter(book => book.shelf === 'read');
+  const wantToRead = books.filter(book => book.shelf === 'wantToRead');
+
 
   const shelves = [
      {title: 'Currently Reading', data: currentlyReading },
@@ -28,15 +23,14 @@ const ListBooks = ({ books, updateShelf }) => {
       <div className="list-books">
         <Header />
          
-        
         <div className="list-books-content">
           <div>
-           { shelves.map(item => 
+           { shelves.map(shelf => 
            <BookShelf 
-           key={item.title} 
-           title={item.title} 
-           books={item.data}  
-           updateShelf={updateShelf} 
+              key={shelf.title} 
+              title={shelf.title} 
+              books={shelf.data}  
+              updateShelf={updateShelf} 
            />
            )}
           </div>
@@ -49,4 +43,4 @@ const ListBooks = ({ books, updateShelf }) => {
     )
 }
 
-export default ListBooks
+export default BookList
