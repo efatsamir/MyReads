@@ -1,23 +1,33 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import BooksContext from '../store/books-context';
 import Add from './Add';
 import BookShelf from './BookShelf';
 import Header from './Header';
 
 
 
-const BookList= ({ books, updateShelf }) => {
-  
+const BookList= () => {
+
+
+
+  const { books } = useContext(BooksContext);
+ 
+
+ 
   const currentlyReading = books.filter(book => book.shelf === 'currentlyReading');
   const read = books.filter(book => book.shelf === 'read');
   const wantToRead = books.filter(book => book.shelf === 'wantToRead');
 
 
   const shelves = [
-     {title: 'Currently Reading', data: currentlyReading },
-     {title: 'Want To Read', data: wantToRead},
-     { title: 'Read', data: read}
+     {title: 'Currently Reading', data: currentlyReading, match: 'currentlyReading' },
+     {title: 'Want To Read', data: wantToRead, match: 'wantToRead'},
+     { title: 'Read', data: read, match: 'read'}
   ];
 
+
+
+   
 
     return (
       <div className="list-books">
@@ -29,8 +39,9 @@ const BookList= ({ books, updateShelf }) => {
            <BookShelf 
               key={shelf.title} 
               title={shelf.title} 
-              books={shelf.data}  
-              updateShelf={updateShelf} 
+              books={shelf.data} 
+             
+              
            />
            )}
           </div>

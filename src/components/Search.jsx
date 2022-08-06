@@ -1,25 +1,31 @@
-import React, {  useEffect, useState } from 'react';
+import React, {  useContext, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCallback } from 'react/cjs/react.development';
-import * as BooksAPI from '../BooksAPI';
+import { search } from '../BooksAPI';
+import BooksContext from '../store/books-context';
 import ListItem from './ListItem';
-import Spinner from './Spinner';
 
-const Search = ({ updateShelf, books }) => {
+
+const Search = () => {
   
   const navigate = useNavigate();
   const navigateHandler = () => {
     navigate('/');
   }
 
+  const { books } = useContext(BooksContext);
+
   const [data, setData] = useState([]);
   const [query, setQuery] = useState('');
   const [noMatches, setNoMatches] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+
 
   const changeHandler = e => {
-    setQuery(e.target.value.trim());
-         
+    // use setTimeout instead of Abortcontroller as we can't 
+    // modify search query given by author to accept abortcontroller
+    setTimeout(() => {
+      setQuery(e.target.value.trim());
+    }, 500);     
   }
 
   const addShelf = useCallback((item) => {
@@ -31,12 +37,11 @@ const Search = ({ updateShelf, books }) => {
      if(!query) return setData([]);
 
      setNoMatches(false);
-     setIsLoading(true);
-     BooksAPI.search(query)
+    
+     search(query)
        .then(res => {
           if(res.error) {
             setNoMatches(true);
-            setIsLoading(false);
             setData([]);
           }else {
             const searchRes = res.map(x => {
@@ -44,7 +49,7 @@ const Search = ({ updateShelf, books }) => {
               return x;
             } )
            
-            setIsLoading(false);
+           
             setData(searchRes);
           }
        })
@@ -67,8 +72,7 @@ const Search = ({ updateShelf, books }) => {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-             { isLoading && <Spinner /> }
-             { !noMatches && data.length > 0 && data.map(book => <ListItem key={book.id} book={book} updateShelf={updateShelf} />) }
+             { !noMatches && data.length > 0 && data.map(book => <ListItem key={book.id} book={book}  />) }
              { noMatches && <h1>No Matches Found!</h1>}
             
           </ol>

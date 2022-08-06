@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
+import BooksContext from '../store/books-context';
 
-const ListItem = ({ book, updateShelf }) => {
+const ListItem = ({ book, setShelfUpdate, updateShelf }) => {
 
-  
+  const [shelf, setShelf] = useState(book.shelf);
+
+  const { updateBook } = useContext(BooksContext)
+
   const imgURL = `url(${ book.imageLinks ? book.imageLinks.smallThumbnail : '' })`;
 
 
   const changeHandler = (e) => {
-     updateShelf(book, e.target.value)
+     setShelf(e.target.value);
+     updateBook(book, e.target.value);
+
   }
   
 
@@ -18,7 +24,7 @@ const ListItem = ({ book, updateShelf }) => {
           <div className="book-top">
             <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: imgURL }}></div>
             <div className="book-shelf-changer">
-              <select value={ book.shelf } onChange={ changeHandler }>
+              <select value={ shelf } onChange={ changeHandler }>
                 <option value="move" disabled>Move to...</option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
