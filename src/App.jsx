@@ -1,20 +1,15 @@
-import './App.css';
-import BookList from './components/BookList';
-import Search from './components/Search';
-import { Route, Routes } from 'react-router-dom';
-
-
+import "./App.css";
+import Search from "./pages/Search";
+import { Route, Routes } from "react-router-dom";
+import Home from './pages/Home';
 
 const App = () => {
-     
-    return (
-        <div className='app'>
-            <Routes>
-                <Route path='/' element={<BookList  />}  />
-                <Route path='/search' element={<Search   />} />
-            </Routes>
-        </div>
-    )
-}
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/search" element={<Search />} />
+    </Routes>
+  );
+};
 
 export default App;
